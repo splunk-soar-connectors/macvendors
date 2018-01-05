@@ -194,7 +194,7 @@ class MacVendorsConnector(BaseConnector):
 
         self._state = self.load_state()
 
-        self._base_url = 'http://api.macvendors.com/'
+        self._base_url = 'https://api.macvendors.com/'
 
         return phantom.APP_SUCCESS
 
