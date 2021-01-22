@@ -9,12 +9,14 @@
     "product_name": "MAC Vendors",
     "product_version_regex": ".*",
     "publisher": "Phantom",
-    "license": "Copyright (c) Phantom Cyber Corporation, 2017-2018",
-    "app_version": "1.0.4",
+    "license": "Copyright (c) 2019-2021 Splunk Inc.",
+    "app_version": "2.0.0",
     "utctime_updated": "2018-12-07T01:59:36.000000Z",
     "package_name": "phantom_macvendors",
-    "main_module": "macvendors_connector.pyc",
-    "min_phantom_version": "3.0.251",
+    "main_module": "macvendors_connector.py",
+    "min_phantom_version": "4.9.39220",
+    "python_version": "3",
+    "latest_tested_versions": [],
     "app_wizard_version": "1.0.0",
     "configuration": {},
     "actions": [
@@ -22,7 +24,6 @@
             "action": "test connectivity",
             "identifier": "test_connectivity",
             "description": "Validate the asset configuration for connectivity",
-            "verbose": "",
             "type": "test",
             "read_only": true,
             "parameters": {},
@@ -33,7 +34,6 @@
             "action": "lookup mac",
             "identifier": "lookup_mac",
             "description": "Query the Mac Vendor based on the OUI",
-            "verbose": "",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -53,7 +53,8 @@
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
-                        "success"
+                        "success",
+                        "failed"
                     ]
                 },
                 {
@@ -62,7 +63,7 @@
                     "contains": [
                         "mac address"
                     ],
-                    "column_name": "mac",
+                    "column_name": "MAC",
                     "column_order": 0,
                     "example_values": [
                         "d0:a6:37:aa:bb:cc"
@@ -71,7 +72,7 @@
                 {
                     "data_path": "action_result.data.*.vendor",
                     "data_type": "string",
-                    "column_name": "vendor",
+                    "column_name": "Vendor",
                     "column_order": 1,
                     "example_values": [
                         "Apple, Inc."
