@@ -10,13 +10,15 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "license": "Copyright (c) 2018-2021 Splunk Inc.",
-    "app_version": "2.0.0",
-    "utctime_updated": "2018-12-07T01:59:36.000000Z",
+    "app_version": "2.0.1",
+    "utctime_updated": "2021-02-12T22:31:56.000000Z",
     "package_name": "phantom_macvendors",
     "main_module": "macvendors_connector.py",
     "min_phantom_version": "4.9.39220",
     "python_version": "3",
-    "latest_tested_versions": ["MAC Vendors Cloud, 2012 on 02/10/2021"],
+    "latest_tested_versions": [
+        "MAC Vendors Cloud, 2012 on 02/10/2021"
+    ],
     "app_wizard_version": "1.0.0",
     "configuration": {},
     "actions": [
