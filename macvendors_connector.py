@@ -10,8 +10,7 @@ import phantom.app as phantom
 from phantom.base_connector import BaseConnector
 from phantom.action_result import ActionResult
 
-# Usage of the consts file is recommended
-# from macvendors_consts import *
+from macvendors_consts import *
 import requests
 import json
 from bs4 import BeautifulSoup
@@ -36,6 +35,35 @@ class MacVendorsConnector(BaseConnector):
         # modify this as you deem fit.
         self._base_url = None
 
+    def _get_error_message_from_exception(self, e):
+        """ This method is used to get appropriate error messages from the exception.
+        :param e: Exception object
+        :return: error message
+        """
+
+        try:
+            if e.args:
+                if len(e.args) > 1:
+                    error_code = e.args[0]
+                    error_msg = e.args[1]
+                elif len(e.args) == 1:
+                    error_code = ERR_CODE_MSG
+                    error_msg = e.args[0]
+            else:
+                error_code = ERR_CODE_MSG
+                error_msg = ERR_MSG_UNAVAILABLE
+        except:
+            error_code = ERR_CODE_MSG
+            error_msg = ERR_MSG_UNAVAILABLE
+
+        if error_code in ERR_CODE_MSG:
+            error_text = "Error Message: {0}".format(error_msg)
+        else:
+            error_text = "Error Code: {0}. Error Message: {1}".format(
+                error_code, error_msg)
+
+        return error_text
+
     def _process_empty_reponse(self, response, action_result):
 
         if response.status_code == 200:
@@ -57,8 +85,9 @@ class MacVendorsConnector(BaseConnector):
             split_lines = error_text.split('\n')
             split_lines = [x.strip() for x in split_lines if x.strip()]
             error_text = '\n'.join(split_lines)
-        except:
-            error_text = "Cannot parse error details"
+        except Exception as ex:
+            err_msg = self._get_error_message_from_exception(ex)
+            error_text = "Cannot parse error details: {0}".format(err_msg)
 
         message = "Status Code: {0}. Data from server:\n{1}\n".format(status_code,
                 error_text)
@@ -72,8 +101,13 @@ class MacVendorsConnector(BaseConnector):
         # Try a json parse
         try:
             resp_json = r.json()
-        except Exception as e:
-            return RetVal(action_result.set_status(phantom.APP_ERROR, "Unable to parse JSON response. Error: {0}".format(str(e))), None)
+        except Exception as ex:
+            err_msg = self._get_error_message_from_exception(ex)
+            return RetVal(
+                action_result.set_status(
+                    phantom.APP_ERROR, "Unable to parse JSON response. Error: {0}".format(err_msg)
+                ), None
+            )
 
         # Please specify the status codes here
         if 200 <= r.status_code < 399:
@@ -116,15 +150,18 @@ class MacVendorsConnector(BaseConnector):
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
-    def _make_rest_call(self, endpoint, action_result,):
+    def _make_rest_call(self, endpoint, action_result):
+
+        resp_json = None
 
         # Create a URL to connect to
-        url = self._base_url + endpoint
+        url = "{}{}".format(self._base_url, endpoint)
 
         try:
             r = requests.get(url)
-        except Exception as e:
-            return RetVal(action_result.set_status( phantom.APP_ERROR, "Error Connecting to server. Details: {0}".format(str(e))))
+        except Exception as ex:
+            err_msg = self._get_error_message_from_exception(ex)
+            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error Connecting to server. Details: {0}".format(err_msg)), resp_json)
 
         return self._process_response(r, action_result)
 
@@ -136,9 +173,9 @@ class MacVendorsConnector(BaseConnector):
         self.save_progress("Querying a MAC address to test connectivity")
 
         # make rest call
-        ret_val, response = self._make_rest_call('/00:0C:29:BB:47:4D', action_result)
+        ret_val, _ = self._make_rest_call('00:0C:29:BB:47:4D', action_result)
 
-        if (phantom.is_fail(ret_val)):
+        if phantom.is_fail(ret_val):
             self.save_progress("Test Connectivity Failed")
             return action_result.get_status()
 
@@ -157,10 +194,10 @@ class MacVendorsConnector(BaseConnector):
         # make rest call
         ret_val, response = self._make_rest_call(mac_address, action_result)
 
-        if (phantom.is_fail(ret_val)):
+        if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        if ('vendor not found' in response.lower()):
+        if 'vendor not found' in response.lower():
             return action_result.set_status(phantom.APP_SUCCESS)
 
         # Add the response into the data section
@@ -220,13 +257,13 @@ if __name__ == '__main__':
     username = args.username
     password = args.password
 
-    if (username is not None and password is None):
+    if username is not None and password is None:
 
         # User specified a username but not a password, so ask
         import getpass
         password = getpass.getpass("Password: ")
 
-    if (username and password):
+    if username and password:
         try:
             print("Accessing the Login page")
             login_url = BaseConnector._get_phantom_base_url() + "login"
@@ -257,7 +294,7 @@ if __name__ == '__main__':
         connector = MacVendorsConnector()
         connector.print_progress_message = True
 
-        if (session_id is not None):
+        if session_id is not None:
             in_json['user_session_token'] = session_id
             connector._set_csrf_info(csrftoken, headers['Referer'])
 
