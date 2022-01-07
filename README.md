@@ -1,9 +1,49 @@
-# Splunk> Phantom
+[comment]: # "Auto-generated SOAR connector documentation"
+# MAC Vendors
 
-Welcome to the open-source repository for Splunk> Phantom's macvendors App.
+Publisher: Splunk  
+Connector Version: 2\.1\.6  
+Product Vendor: MAC Vendors  
+Product Name: MAC Vendors  
+Product Version Supported (regex): "\.\*"  
+Minimum Product Version: 4\.9\.39220  
 
-Please have a look at our [Contributing Guide](https://github.com/Splunk-SOAR-Apps/.github/blob/main/.github/CONTRIBUTING.md) if you are interested in contributing, raising issues, or learning more about open-source Phantom apps.
+Integrates with the MAC Vendors service to implement investigative actions
 
-## Legal and License
+### Supported Actions  
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity  
+[lookup mac](#action-lookup-mac) - Query the Mac Vendor based on the OUI  
 
-This Phantom App is licensed under the Apache 2.0 license. Please see our [Contributing Guide](https://github.com/Splunk-SOAR-Apps/.github/blob/main/.github/CONTRIBUTING.md#legal-notice) for further details.
+## action: 'test connectivity'
+Validate the asset configuration for connectivity
+
+Type: **test**  
+Read only: **True**
+
+#### Action Parameters
+No parameters are required for this action
+
+#### Action Output
+No Output  
+
+## action: 'lookup mac'
+Query the Mac Vendor based on the OUI
+
+Type: **investigate**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**mac** |  required  | MAC address to lookup | string |  `mac address` 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS
+--------- | ---- | --------
+action\_result\.parameter\.mac | string |  `mac address` 
+action\_result\.data\.\*\.vendor | string | 
+action\_result\.status | string | 
+action\_result\.message | string | 
+action\_result\.summary\.vendor\_found | boolean | 
+summary\.total\_objects | numeric | 
+summary\.total\_objects\_successful | numeric | 
