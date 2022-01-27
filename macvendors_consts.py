@@ -17,3 +17,5 @@
 # Error message constants
 ERR_CODE_MSG = "Error code unavailable"
 ERR_MSG_UNAVAILABLE = "Error message unavailable. Please check the asset configuration and|or action parameters"
+
+DEFAULT_REQUEST_TIMEOUT = 30  # in seconds
