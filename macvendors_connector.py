@@ -196,7 +196,8 @@ class MacVendorsConnector(BaseConnector):
     def _handle_lookup_mac(self, param):
 
         # Add an action result object to self (BaseConnector) to represent the action for this param
-        action_result = self.add_action_result(ActionResult(dict(param)))
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+	action_result = self.add_action_result(ActionResult(dict(param)))
         summary = action_result.update_summary({'vendor_found': False})
 
         mac_address = param['mac']
@@ -214,6 +215,7 @@ class MacVendorsConnector(BaseConnector):
         action_result.add_data({'vendor': response})
         summary.update({'vendor_found': True})
 
+	self.save_progress("In action handler for: {0}. Action Status: {1}".format(self.get_action_identifier(), phantom.APP_SUCCESS))
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def handle_action(self, param):
