@@ -74,7 +74,7 @@ class MacVendorsConnector(BaseConnector):
 
         return error_text
 
-    def _process_empty_reponse(self, response, action_result):
+    def _process_empty_response(self, response, action_result):
 
         if response.status_code == 200:
             return RetVal(phantom.APP_SUCCESS, {})
@@ -152,7 +152,7 @@ class MacVendorsConnector(BaseConnector):
 
         # it's not content-type that is to be parsed, handle an empty response
         if not r.text:
-            return self._process_empty_reponse(r, action_result)
+            return self._process_empty_response(r, action_result)
 
         # everything else is actually an error at this point
         message = "Can't process response from server. Status Code: {0} Data from server: {1}".format(
