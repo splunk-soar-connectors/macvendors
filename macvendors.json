@@ -9,7 +9,7 @@
     "product_name": "MAC Vendors",
     "product_version_regex": ".*",
     "publisher": "Splunk",
-    "license": "Copyright (c) 2018-2022 Splunk Inc.",
+    "license": "Copyright (c) 2018-2023 Splunk Inc.",
     "app_version": "2.1.9",
     "utctime_updated": "2022-01-28T19:22:42.000000Z",
     "package_name": "phantom_macvendors",
