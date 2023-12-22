@@ -1,6 +1,6 @@
 # File: macvendors_connector.py
 #
-# Copyright (c) 2018-2022 Splunk Inc.
+# Copyright (c) 2018-2023 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -54,27 +54,27 @@ class MacVendorsConnector(BaseConnector):
         try:
             if e.args:
                 if len(e.args) > 1:
-                    error_code = e.args[0]
-                    error_msg = e.args[1]
+                    err_code = e.args[0]
+                    err_msg = e.args[1]
                 elif len(e.args) == 1:
-                    error_code = ERR_CODE_MSG
-                    error_msg = e.args[0]
+                    err_code = ERR_CODE_MSG
+                    err_msg = e.args[0]
             else:
-                error_code = ERR_CODE_MSG
-                error_msg = ERR_MSG_UNAVAILABLE
+                err_code = ERR_CODE_MSG
+                err_msg = ERR_MSG_UNAVAILABLE
         except:
-            error_code = ERR_CODE_MSG
-            error_msg = ERR_MSG_UNAVAILABLE
+            err_code = ERR_CODE_MSG
+            err_msg = ERR_MSG_UNAVAILABLE
 
-        if error_code in ERR_CODE_MSG:
-            error_text = "Error Message: {0}".format(error_msg)
+        if err_code in ERR_CODE_MSG:
+            error_text = "Error Message: {0}".format(err_msg)
         else:
             error_text = "Error Code: {0}. Error Message: {1}".format(
-                error_code, error_msg)
+                err_code, err_msg)
 
         return error_text
 
-    def _process_empty_reponse(self, response, action_result):
+    def _process_empty_response(self, response, action_result):
 
         if response.status_code == 200:
             return RetVal(phantom.APP_SUCCESS, {})
@@ -96,8 +96,8 @@ class MacVendorsConnector(BaseConnector):
             split_lines = [x.strip() for x in split_lines if x.strip()]
             error_text = '\n'.join(split_lines)
         except Exception as ex:
-            err_msg = self._get_error_message_from_exception(ex)
-            error_text = "Cannot parse error details: {0}".format(err_msg)
+            error_message = self._get_error_message_from_exception(ex)
+            error_text = "Cannot parse error details: {0}".format(error_message)
 
         message = "Status Code: {0}. Data from server:\n{1}\n".format(status_code,
                 error_text)
@@ -112,10 +112,10 @@ class MacVendorsConnector(BaseConnector):
         try:
             resp_json = r.json()
         except Exception as ex:
-            err_msg = self._get_error_message_from_exception(ex)
+            error_message = self._get_error_message_from_exception(ex)
             return RetVal(
                 action_result.set_status(
-                    phantom.APP_ERROR, "Unable to parse JSON response. Error: {0}".format(err_msg)
+                    phantom.APP_ERROR, "Unable to parse JSON response. Error: {0}".format(error_message)
                 ), None
             )
 
@@ -152,7 +152,7 @@ class MacVendorsConnector(BaseConnector):
 
         # it's not content-type that is to be parsed, handle an empty response
         if not r.text:
-            return self._process_empty_reponse(r, action_result)
+            return self._process_empty_response(r, action_result)
 
         # everything else is actually an error at this point
         message = "Can't process response from server. Status Code: {0} Data from server: {1}".format(
@@ -170,8 +170,9 @@ class MacVendorsConnector(BaseConnector):
         try:
             r = requests.get(url, timeout=DEFAULT_REQUEST_TIMEOUT)
         except Exception as ex:
-            err_msg = self._get_error_message_from_exception(ex)
-            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error Connecting to server. Details: {0}".format(err_msg)), resp_json)
+            error_message = self._get_error_message_from_exception(ex)
+            return RetVal(
+                action_result.set_status(phantom.APP_ERROR, "Error Connecting to server. Details: {0}".format(error_message)), resp_json)
 
         return self._process_response(r, action_result)
 
