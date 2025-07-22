@@ -16,7 +16,7 @@
     "main_module": "macvendors_connector.py",
     "min_phantom_version": "5.1.0",
     "fips_compliant": true,
-    "python_version": "3",
+    "python_version": ["3.9", "3.13"],
     "latest_tested_versions": [
         "MAC Vendors Cloud, 2012 on 09/13/2021"
     ],
