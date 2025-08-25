@@ -1,23 +1,23 @@
 # MAC Vendors
 
-Publisher: Splunk \
-Connector Version: 2.1.10 \
-Product Vendor: MAC Vendors \
-Product Name: MAC Vendors \
+Publisher: Splunk <br>
+Connector Version: 2.1.10 <br>
+Product Vendor: MAC Vendors <br>
+Product Name: MAC Vendors <br>
 Minimum Product Version: 5.1.0
 
 Integrates with the MAC Vendors service to implement investigative actions
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity \
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity <br>
 [lookup mac](#action-lookup-mac) - Query the Mac Vendor based on the OUI
 
 ## action: 'test connectivity'
 
 Validate the asset configuration for connectivity
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -32,7 +32,7 @@ No Output
 
 Query the Mac Vendor based on the OUI
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
