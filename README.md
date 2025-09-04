@@ -1,7 +1,7 @@
 # MAC Vendors
 
 Publisher: Splunk <br>
-Connector Version: 2.1.10 <br>
+Connector Version: 2.1.11 <br>
 Product Vendor: MAC Vendors <br>
 Product Name: MAC Vendors <br>
 Minimum Product Version: 5.1.0
