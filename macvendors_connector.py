@@ -129,16 +129,17 @@ class MacVendorsConnector(BaseConnector):
 
         # Process each 'Content-Type' of response separately
 
-        # Process a json response
-        if "text" in r.headers.get("Content-Type", ""):
-            return RetVal(phantom.APP_SUCCESS, r.text)
-
         # Process an HTML resonse, Do this no matter what the api talks.
         # There is a high chance of a PROXY in between phantom and the rest of
         # world, in case of errors, PROXY's return HTML, this function parses
         # the error and adds it to the action_result.
         if "html" in r.headers.get("Content-Type", ""):
             return self._process_html_response(r, action_result)
+
+        # The API returns successful lookups as plain text. Do not treat text
+        # error responses, such as rate-limit messages, as vendor data.
+        if "text" in r.headers.get("Content-Type", "") and 200 <= r.status_code < 399:
+            return RetVal(phantom.APP_SUCCESS, r.text)
 
         # it's not content-type that is to be parsed, handle an empty response
         if not r.text:
