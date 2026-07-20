@@ -1,3 +1,1 @@
 **Unreleased**
-
-* Reject upstream HTTP errors instead of recording their response bodies as vendor data.
